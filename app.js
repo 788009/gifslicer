@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- 辅助函数：生成时间戳 (格式: YYYYMMDD_HHMMSS) ---
+    function getTimestamp() {
+        const now = new Date();
+        const pad = (n) => n.toString().padStart(2, '0');
+        return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    }
+
     // --- 变量初始化 ---
     const fileInput = document.getElementById('target-images');
     const fileInfo = document.getElementById('target-images-info');
@@ -266,6 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetW = baseImg.width;
         const targetH = baseImg.height;
 
+        const batchTimestamp = getTimestamp();
+
         let slicesY = []; 
 
         if (mode === 'even') {
@@ -323,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gif.render();
                 });
 
-                generatedGifs.push({ name: `slice_${i + 1}.gif`, blob: gifBlob });
+                generatedGifs.push({ name: `slice_${batchTimestamp}_${i + 1}.gif`, blob: gifBlob });
 
                 const url = URL.createObjectURL(gifBlob);
                 const item = document.createElement('div');
@@ -361,8 +370,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         zip.generateAsync({ type: 'blob' }).then(content => {
             const link = document.createElement('a');
+            const downloadTimestamp = getTimestamp();
             link.href = URL.createObjectURL(content);
-            link.download = 'GIF_Slices.zip';
+            link.download = `GIF_Slices_${downloadTimestamp}.zip`;
             link.click();
         });
     });
