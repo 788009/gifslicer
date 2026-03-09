@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动图切片生成器 | GIF Slicer & Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>动图切片生成器</h1>
+            <p>多图合成动图，支持自定义多端水平切割与批量下载</p>
+        </header>
+
+        <main>
+            <div class="view-section active">
+                <section class="card">
+                    <h2>1. 上传图片源</h2>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="target-images" multiple accept="image/jpeg, image/png, image/webp">
+                        <label for="target-images" class="upload-btn">选择多张图片</label>
+                        <span id="target-images-info">未选择任何文件</span>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>2. 基础设置</h2>
+                    <div class="form-group">
+                        <label>选择基准尺寸图片：</label>
+                        <select id="base-image-select">
+                            <option value="">请先上传图片...</option>
+                        </select>
+                        <p class="hint-text" style="margin-bottom:0;">注：其余图片将以此图的尺寸为中心放大或缩小截取。</p>
+                    </div>
+                    <div class="form-group">
+                        <label>帧率 (FPS)：</label>
+                        <input type="number" id="fps-input" value="10" min="1" max="60">
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>3. 切割设置</h2>
+                    <div class="mode-selector">
+                        <label><input type="radio" name="slice-mode" value="even" checked> 平均切割</label>
+                        <label><input type="radio" name="slice-mode" value="custom"> 自定义水平线</label>
+                    </div>
+
+                    <div id="settings-even" class="settings-panel active">
+                        <div class="form-group">
+                            <label>等分切割份数：</label>
+                            <input type="number" id="even-slices" value="3" min="1" max="100">
+                        </div>
+                    </div>
+
+                    <div id="settings-custom" class="settings-panel">
+                        <div class="form-group">
+                            <label>自定义水平切割线：</label>
+                            <div style="margin-bottom: 10px; display: flex; gap: 10px;">
+                                <button id="add-line-btn" class="secondary-btn">添加切割线</button>
+                                <button id="remove-line-btn" class="secondary-btn">删除最后一条切割线</button>
+                            </div>
+                            <div id="editor-wrapper" class="editor-wrapper">
+                                <img id="editor-img" src="" alt="预览图" style="display: none;">
+                                <div id="lines-container"></div>
+                            </div>
+                            <p class="hint-text">提示：单击红线后调整切割位置。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <button id="generate-btn" class="primary-btn" disabled>加载环境依赖中...</button>
+
+                <div id="progress-wrapper" style="display: none; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px; color: var(--text-muted);">
+                        <span>生成进度</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                </div>
+
+                <section id="result-section" class="card" style="display: none;">
+                    <div class="result-header">
+                        <h2>4. 预览与下载</h2>
+                        <button id="download-all-btn" class="secondary-btn">打包下载 ZIP</button>
+                    </div>
+                    <div id="preview-container" class="preview-grid"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
