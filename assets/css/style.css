@@ -219,3 +219,25 @@ select, input[type="number"] {
     background-color: var(--primary-color);
     transition: width 0.1s linear;
 }
+/* --- GitHub 图标链接样式 --- */
+.github-link {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    color: var(--text-color);
+    transition: color 0.3s ease, transform 0.3s ease;
+    z-index: 100;
+}
+
+.github-link:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* 移动端稍微调整右上角距离 */
+@media (max-width: 500px) {
+    .github-link {
+        top: 15px;
+        right: 15px;
+    }
+}
