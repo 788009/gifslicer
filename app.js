@@ -126,10 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     removeLineBtn.addEventListener('click', () => {
-        if (customLines.length > 0) {
-            customLines.pop();
+        if (selectedLineIndex !== null) {
+            // 删除当前被选中的那条切割线
+            customLines.splice(selectedLineIndex, 1);
             selectedLineIndex = null; // 删除后清空选中状态
             renderLines();
+        } else {
+            // 如果用户没选中线就点了删除，给个小提示
+            alert('请先在图片上单击选中一条需要删除的切割线（选中后会变成蓝色）。');
         }
     });
 
