@@ -92,7 +92,27 @@
                 </section>
             </div>
         </main>
+        <footer style="text-align: center; margin-top: 40px; padding-bottom: 20px; color: var(--text-muted); font-size: 0.85em;">
+            <span id="busuanzi_container_site_pv">
+                本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+            </span>
+            <span style="margin: 0 10px;">|</span>
+            <span id="busuanzi_container_site_uv">
+                本站总访客数 <span id="busuanzi_value_site_uv"></span> 人
+            </span>
+        </footer>
     </div>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+                e.target.classList.add('active');
+                document.getElementById(e.target.dataset.target).classList.add('active');
+            });
+        });
+    </script>
     <script src="app.js"></script>
 </body>
 </html>
