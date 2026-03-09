@@ -231,12 +231,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousedown', deselectLine);
     document.addEventListener('touchstart', deselectLine, { passive: false });
 
-    // --- 核心：图片缩放裁剪，已修复 Canvas 警告 ---
-    function drawScaledAndCentered(img, targetW, targetH, sliceY, sliceH) {
+    function drawScaledAndCentered(img, targetW, targetH, sliceY, sliceH, outScale) {
+        // 计算最终输出的缩放尺寸
+        const finalW = Math.max(1, Math.round(targetW * outScale));
+        const finalH = Math.max(1, Math.round(sliceH * outScale));
+
         const canvas = document.createElement('canvas');
-        canvas.width = targetW;
-        canvas.height = sliceH;
-        // 修复警告 1
+        canvas.width = finalW;
+        canvas.height = finalH;
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
         const scale = Math.max(targetW / img.width, targetH / img.height);
@@ -249,11 +251,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = targetW;
         tempCanvas.height = targetH;
-        // 修复警告 2
         const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
         tempCtx.drawImage(img, dx, dy, drawW, drawH);
 
-        ctx.drawImage(tempCanvas, 0, sliceY, targetW, sliceH, 0, 0, targetW, sliceH);
+        // 将切片区域绘制到最终画布上，同时完成体积压缩的缩放
+        ctx.drawImage(tempCanvas, 0, sliceY, targetW, sliceH, 0, 0, finalW, finalH);
         return canvas;
     }
 
@@ -269,6 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const baseImg = uploadedImages[baseIdx].img;
         const fps = parseInt(document.getElementById('fps-input').value) || 1;
         const delay = 1000 / fps;
+
+        const qualityVal = parseInt(document.getElementById('quality-select').value) || 10;
+        const scaleVal = parseFloat(document.getElementById('scale-select').value) || 1;
 
         const targetW = baseImg.width;
         const targetH = baseImg.height;
@@ -307,12 +312,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (sliceH < 1) continue;
 
+                const finalW = Math.max(1, Math.round(targetW * scaleVal));
+                const finalH = Math.max(1, Math.round(sliceH * scaleVal));
+
                 const gif = new GIF({
                     workers: 2,
-                    quality: 10,
-                    workerScript: workerBlobUrl, // 使用刚刚生成的 Blob URL
-                    width: targetW,
-                    height: sliceH
+                    quality: qualityVal, // 传入画质参数
+                    workerScript: workerBlobUrl,
+                    width: finalW,       // 使用压缩后的宽度
+                    height: finalH       // 使用压缩后的高度
                 });
 
                 // 监听单一切片进度并更新全局进度条
@@ -323,7 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 for (let j = 0; j < uploadedImages.length; j++) {
-                    const frameCanvas = drawScaledAndCentered(uploadedImages[j].img, targetW, targetH, sliceY, sliceH);
+                    // --- 修改：多传一个 scaleVal 给绘制函数 ---
+                    const frameCanvas = drawScaledAndCentered(uploadedImages[j].img, targetW, targetH, sliceY, sliceH, scaleVal);
                     gif.addFrame(frameCanvas, { delay: delay });
                 }
 

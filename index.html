@@ -44,6 +44,28 @@
                         <label>帧率 (FPS)：</label>
                         <input type="number" id="fps-input" value="1" min="1" max="60">
                     </div>
+                    
+                    <div class="form-group" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>色彩采样质量：</label>
+                            <select id="quality-select">
+                                <option value="1">1 - 极高画质 (体积庞大)</option>
+                                <option value="10" selected>10 - 标准 (默认推荐)</option>
+                                <option value="20">20 - 较低画质 (体积较小)</option>
+                                <option value="30">30 - 极低画质 (体积极小)</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label>输出尺寸缩放：</label>
+                            <select id="scale-select">
+                                <option value="1" selected>100% (原图尺寸)</option>
+                                <option value="0.75">75% (减小约 40% 体积)</option>
+                                <option value="0.5">50% (减小约 75% 体积)</option>
+                                <option value="0.25">25% (适合预览/表情包)</option>
+                            </select>
+                        </div>
+                    </div>
+                    </section>
                 </section>
 
                 <section class="card">
