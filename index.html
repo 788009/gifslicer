@@ -44,8 +44,11 @@
                 <section class="card">
                     <h2>3. 切割设置</h2>
                     <div class="mode-selector">
-                        <label><input type="radio" name="slice-mode" value="even" checked> 平均切割</label>
-                        <label><input type="radio" name="slice-mode" value="custom"> 自定义水平线</label>
+                        <input type="radio" name="slice-mode" value="even" id="mode-even" checked>
+                        <label for="mode-even">平均切割</label>
+
+                        <input type="radio" name="slice-mode" value="custom" id="mode-custom">
+                        <label for="mode-custom">自定义水平线</label>
                     </div>
 
                     <div id="settings-even" class="settings-panel active">
