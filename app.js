@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mode = document.querySelector('input[name="slice-mode"]:checked').value;
         const baseIdx = baseImageSelect.value;
         const baseImg = uploadedImages[baseIdx].img;
-        const fps = parseInt(document.getElementById('fps-input').value) || 10;
+        const fps = parseInt(document.getElementById('fps-input').value) || 1;
         const delay = 1000 / fps;
 
         const targetW = baseImg.width;
