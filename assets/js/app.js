@@ -333,9 +333,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 for (let j = 0; j < uploadedImages.length; j++) {
-                    // --- 修改：多传一个 scaleVal 给绘制函数 ---
                     const frameCanvas = drawScaledAndCentered(uploadedImages[j].img, targetW, targetH, sliceY, sliceH, scaleVal);
-                    gif.addFrame(frameCanvas, { delay: delay });
+                    
+                    // --- 优化：手动提取 ImageData，绕过 gif.js 内部的低效读取 ---
+                    const ctx = frameCanvas.getContext('2d', { willReadFrequently: true });
+                    const imageData = ctx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
+                    
+                    // 直接将纯像素数据传给 gif.js
+                    gif.addFrame(imageData, { delay: delay });
                 }
 
                 const gifBlob = await new Promise((resolve) => {
