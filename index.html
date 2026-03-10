@@ -88,15 +88,23 @@
                     <div id="settings-custom" class="settings-panel">
                         <div class="form-group">
                             <label>自定义水平切割线：</label>
-                            <div style="margin-bottom: 10px; display: flex; gap: 10px;">
-                                <button id="add-line-btn" class="secondary-btn">添加切割线</button>
-                                <button id="remove-line-btn" class="secondary-btn">删除选中切割线</button>
+                            
+                            <div id="custom-empty-state" style="padding: 20px; text-align: center; background: var(--bg-color); border-radius: 6px; border: 1px dashed var(--border-color); color: var(--text-muted);">
+                                请先在上方上传图片
                             </div>
-                            <div id="editor-wrapper" class="editor-wrapper">
-                                <img id="editor-img" src="" alt="预览图" style="display: none;">
-                                <div id="lines-container"></div>
+
+                            <div id="custom-workspace" style="display: none;">
+                                <div style="margin-bottom: 10px; display: flex; gap: 10px;">
+                                    <button id="add-line-btn" class="secondary-btn">添加切割线</button>
+                                    <button id="remove-line-btn" class="secondary-btn">删除选中切割线</button>
+                                </div>
+                                <div id="editor-wrapper" class="editor-wrapper">
+                                    <img id="editor-img" src="" alt="预览图" style="display: none;">
+                                    <div id="lines-container"></div>
+                                </div>
+                                <p class="hint-text">提示：单击红线后调整切割位置。</p>
                             </div>
-                            <p class="hint-text">提示：单击红线后调整切割位置。</p>
+                            
                         </div>
                     </div>
                 </section>

@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const linesContainer = document.getElementById('lines-container');
     const addLineBtn = document.getElementById('add-line-btn');
     const removeLineBtn = document.getElementById('remove-line-btn');
+
+    const customEmptyState = document.getElementById('custom-empty-state');
+    const customWorkspace = document.getElementById('custom-workspace');
     
     const generateBtn = document.getElementById('generate-btn');
     const progressWrapper = document.getElementById('progress-wrapper');
@@ -101,9 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 编辑器：更新基准图预览 ---
     function updateEditorImage() {
-        if (uploadedImages.length === 0) return;
+        // 如果还没有上传图片，显示提示，隐藏工作区，中断后续渲染
+        if (uploadedImages.length === 0) {
+            if (customEmptyState && customWorkspace) {
+                customEmptyState.style.display = 'block';
+                customWorkspace.style.display = 'none';
+            }
+            return;
+        }
+        
+        // 如果已上传图片，隐藏提示，显示工作区
+        if (customEmptyState && customWorkspace) {
+            customEmptyState.style.display = 'none';
+            customWorkspace.style.display = 'block';
+        }
+
         const selectedIdx = baseImageSelect.value;
         const baseImg = uploadedImages[selectedIdx].img;
         
