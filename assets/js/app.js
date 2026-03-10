@@ -38,20 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDragging = false;
     let currentDragLine = null;
     let generatedGifs = []; 
-    let workerBlobUrl = null; // 用于存放 Worker 的本地 URL
-
-    // --- 突破跨域限制：自动将 CDN 的 Worker 转为本地 Blob URL ---
-    fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js')
-        .then(res => res.blob())
-        .then(blob => {
-            workerBlobUrl = URL.createObjectURL(blob);
-            generateBtn.disabled = false;
-            generateBtn.textContent = '生成动图切片';
-        })
-        .catch(err => {
-            console.error('Worker 加载失败:', err);
-            generateBtn.textContent = '网络错误：无法加载生成引擎';
-        });
 
     // --- 事件监听：模式切换 ---
     modeRadios.forEach(radio => {
@@ -334,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gif = new GIF({
                     workers: 2,
                     quality: qualityVal, // 传入画质参数
-                    workerScript: workerBlobUrl,
+                    workerScript: './assets/lib/gif.worker.js',
                     width: finalW,       // 使用压缩后的宽度
                     height: finalH       // 使用压缩后的高度
                 });
